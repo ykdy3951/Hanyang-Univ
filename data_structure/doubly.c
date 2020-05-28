@@ -34,10 +34,17 @@ int main()
 
     int dataList[] = {2, 4, 5, 6, 3, 1};
     int positionList[] = {1, 2, 3, -1, 3, 1};
-    for (int i = 0; i < strlen(dataList); i++)
+    for (int i = 0; i < 6; i++)
     {
         Insert(&dlist, dataList[i], positionList[i]);
-        for (int j = 0; j <)
+        Node *temp = dlist.Head;
+        for (int j = 0; j < i; i++)
+        {
+            temp = temp->next;
+            printf("%d -> ", temp->data);
+        }
+        temp = temp->next;
+        printf("%d\n\n", temp->data);
     }
 
     return 0;
@@ -99,7 +106,10 @@ void Insert(DoublyLinkedList *dlist, DATATYPE data, int Position)
 
 void Delete(DoublyLinkedList *dlist, int Position)
 {
+    Node *pred_pre = Find(dlist, Position - 1);
     Node *pred = Find(dlist, Position);
+    Node *pred_next = Find(dlist, Position + 1);
+
     if (pred == NULL)
     {
         printf("Delete error!");
@@ -107,13 +117,13 @@ void Delete(DoublyLinkedList *dlist, int Position)
     }
     else if (RetCount(dlist) == Position)
     {
-        pred->prev->next = NULL;
+        pred_pre->next = NULL;
         free(pred);
     }
     else
     {
-        pred->prev->next = pred->next;
-        pred->next->prev = pred->prev;
+        pred_pre->next = pred->next;
+        pred_next->prev = pred->prev;
         free(pred);
     }
     dlist->NumofData--;
@@ -123,7 +133,6 @@ Node *Find(DoublyLinkedList *dlist, int Position)
 {
     if (Position > dlist->NumofData)
     {
-        printf("Find error!");
         return NULL;
     }
 
